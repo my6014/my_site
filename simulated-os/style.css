@@ -1,0 +1,626 @@
+/* ============================================
+   Y2K Desktop — Win95/Me Style CSS
+   ============================================ */
+
+@font-face {
+  font-family: "Perfect DOS VGA 437";
+  font-style: normal;
+  font-weight: normal;
+  src: url("fonts/perfect-dos.woff2") format("woff2"),
+       url("fonts/perfect-dos.woff") format("woff");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+  font-size: 14px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #1a1a2e;
+  background-image:
+    radial-gradient(ellipse at center, #2a2a4a 0%, #1a1a2e 70%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+
+/* ============================================
+   CRT Monitor Shell
+   ============================================ */
+
+#crt-monitor {
+  position: relative;
+  background: linear-gradient(180deg, #e8dcc8 0%, #d4c8b0 30%, #c8b898 100%);
+  border-radius: 22px 22px 10px 10px;
+  padding: 38px 42px 48px 42px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.5),
+    0 2px 8px rgba(0,0,0,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.25);
+  border: 2px solid #b8a080;
+}
+
+#monitor-screen {
+  position: relative;
+  width: 1024px;
+  height: 700px;
+  background: #008080;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 60px rgba(0,0,0,0.5),
+    0 0 0 3px #3a3a3a;
+}
+
+/* Monitor brand badge */
+.crt-badge {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+}
+
+/* LED indicator */
+.crt-led {
+  width: 7px;
+  height: 7px;
+  background: #00cc44;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  box-shadow: 0 0 6px #00ff55;
+}
+
+/* Name label on monitor bezel */
+.monitor-label {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+}
+
+/* Monitor stand */
+.monitor-stand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stand-neck {
+  width: 120px;
+  height: 40px;
+  background: linear-gradient(180deg, #c8b898, #b8a888);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.stand-base {
+  width: 260px;
+  height: 22px;
+  background: linear-gradient(180deg, #c8b898, #b0a080);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* ============================================
+   Desktop
+   ============================================ */
+
+#desktop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 38px; /* leave room for taskbar */
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 72px;
+  padding: 6px 4px;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.desktop-icon:hover {
+  border-color: #c0c0c0;
+  background: rgba(0, 0, 128, 0.05);
+}
+
+.desktop-icon.selected {
+  border: 1px dotted #000080;
+  background: rgba(0, 0, 128, 0.15);
+}
+
+.desktop-icon img {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  image-rendering: pixelated;
+}
+
+.desktop-icon span {
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  word-wrap: break-word;
+  max-width: 68px;
+  line-height: 1.2;
+}
+
+/* ============================================
+   Taskbar
+   ============================================ */
+
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  padding: 3px 4px;
+  gap: 4px;
+  z-index: 9999;
+}
+
+#start-btn {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 2px 8px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#start-btn:active {
+  border-color: #808080 #fff #fff #808080;
+  padding: 3px 7px 1px 9px;
+}
+
+#start-btn.active {
+  border-color: #808080 #fff #fff #808080;
+  padding: 3px 7px 1px 9px;
+}
+
+#taskbar-windows {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 28px;
+  align-items: center;
+}
+
+.taskbar-window-btn {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 2px 10px;
+  height: 24px;
+  min-width: 140px;
+  max-width: 200px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 2px solid;
+  background: #c0c0c0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.taskbar-window-btn.active {
+  border-color: #808080 #fff #fff #808080;
+  font-weight: bold;
+  background: #d4d0c8;
+}
+
+.taskbar-window-btn.inactive {
+  border-color: #fff #808080 #808080 #fff;
+}
+
+#system-tray {
+  flex-shrink: 0;
+  border: 2px inset #808080;
+  padding: 2px 8px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+}
+
+#system-tray #clock {
+  font-size: 12px;
+}
+
+/* ============================================
+   Start Menu
+   ============================================ */
+
+#start-menu {
+  position: absolute;
+  bottom: 38px;
+  left: 4px;
+  width: 200px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  z-index: 10000;
+  display: flex;
+}
+
+#start-menu.hidden {
+  display: none;
+}
+
+.start-banner {
+  width: 28px;
+  background: linear-gradient(to top, #000080, #1084d0);
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 3px;
+  writing-mode: vertical-lr;
+}
+
+.start-banner span {
+  color: #fff;
+  font-size: 16px;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+.start-items {
+  flex: 1;
+  padding: 4px 0;
+}
+
+.start-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+}
+
+.start-item:hover {
+  background: #000080;
+  color: #fff;
+}
+
+.start-item img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.start-sep {
+  border: none;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  margin: 4px 4px;
+}
+
+/* ============================================
+   Windows
+   ============================================ */
+
+.window {
+  position: absolute;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  min-height: 120px;
+  box-shadow: 1px 1px 0 #000;
+  z-index: 100;
+}
+
+.window.focused {
+  z-index: 1000;
+}
+
+/* override when dragging/resizing */
+.window.dragging,
+.window.resizing {
+  transition: none;
+}
+
+/* Title bar */
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 12px;
+  padding: 0 3px;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.window.focused .titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+}
+
+.window:not(.focused) .titlebar {
+  background: linear-gradient(90deg, #808080, #b5b5b5);
+}
+
+.titlebar-icon {
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.titlebar-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.titlebar-btns {
+  display: flex;
+  gap: 2px;
+}
+
+.titlebar-btns button {
+  width: 18px;
+  height: 18px;
+  font-family: inherit;
+  font-size: 10px;
+  line-height: 1;
+  border: 1px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  color: #000;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titlebar-btns button:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+/* Menu bar */
+.menubar {
+  display: flex;
+  gap: 0;
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 1px 4px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.menu-item {
+  padding: 2px 8px;
+  cursor: pointer;
+  color: #000;
+}
+
+.menu-item:hover {
+  background: #000080;
+  color: #fff;
+}
+
+/* Window body */
+.window-body {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  font-size: 13px;
+  color: #000;
+}
+
+/* Generic Win95 button */
+.win-btn {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 4px 16px;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  cursor: pointer;
+  outline: none;
+  min-width: 75px;
+}
+
+.win-btn:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+/* ============================================
+   DOS Prompt Window
+   ============================================ */
+
+.dos-body {
+  background: #000;
+  color: #c0c0c0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+  font-size: 14px;
+  padding: 0;
+}
+
+.dos-output {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: inherit;
+}
+
+.dos-output .blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.dos-input-line {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-top: 1px solid #333;
+  color: #c0c0c0;
+  font-family: inherit;
+}
+
+.dos-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #c0c0c0;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  caret-color: #c0c0c0;
+  margin-left: 4px;
+}
+
+/* ============================================
+   Notepad
+   ============================================ */
+
+.notepad-area {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: none;
+  resize: none;
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+  font-size: 13px;
+  padding: 8px;
+  outline: none;
+  background: #fff;
+  color: #000;
+  line-height: 1.4;
+}
+
+/* ============================================
+   Shutdown Overlay
+   ============================================ */
+
+#shutdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#shutdown-overlay.hidden {
+  display: none;
+}
+
+#shutdown-dialog {
+  text-align: center;
+  color: #ff6600;
+  font-family: "Perfect DOS VGA 437", "Courier New", monospace;
+  font-size: 18px;
+}
+
+#shutdown-dialog img {
+  margin-bottom: 20px;
+  filter: brightness(0) saturate(100%) invert(31%) sepia(89%) saturate(1816%) hue-rotate(4deg) brightness(101%) contrast(106%);
+}
+
+#shutdown-dialog .win-btn {
+  margin-top: 24px;
+  color: #000;
+}
+
+/* ============================================
+   Resize handles
+   ============================================ */
+
+.resize-handle {
+  position: absolute;
+  z-index: 10;
+}
+
+.resize-handle.n  { top: -3px; left: 4px; right: 4px; height: 6px; cursor: n-resize; }
+.resize-handle.s  { bottom: -3px; left: 4px; right: 4px; height: 6px; cursor: s-resize; }
+.resize-handle.e  { right: -3px; top: 4px; bottom: 4px; width: 6px; cursor: e-resize; }
+.resize-handle.w  { left: -3px; top: 4px; bottom: 4px; width: 6px; cursor: w-resize; }
+.resize-handle.ne { top: -3px; right: -3px; width: 10px; height: 10px; cursor: ne-resize; }
+.resize-handle.nw { top: -3px; left: -3px; width: 10px; height: 10px; cursor: nw-resize; }
+.resize-handle.se { bottom: -3px; right: -3px; width: 10px; height: 10px; cursor: se-resize; }
+.resize-handle.sw { bottom: -3px; left: -3px; width: 10px; height: 10px; cursor: sw-resize; }
+
+/* ============================================
+   Utility
+   ============================================ */
+
+.hidden {
+  display: none !important;
+}
+
+/* Scrollbar (Win95 style) */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+::-webkit-scrollbar-track {
+  background: #c0c0c0;
+}
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+}
+::-webkit-scrollbar-button {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  display: block;
+  height: 16px;
+}
+::-webkit-scrollbar-corner {
+  background: #c0c0c0;
+}

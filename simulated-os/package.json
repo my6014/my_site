@@ -1,0 +1,10 @@
+{
+  "name": "my_site",
+  "version": "1.0.0",
+  "description": "马勇的个人主页 — Win98/Me 风格模拟桌面，纯 HTML/CSS/JS",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000 --no-clipboard"
+  },
+  "license": "MIT"
+}
