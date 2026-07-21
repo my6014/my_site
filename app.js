@@ -10,32 +10,6 @@
   let focusedWindow = null;
   let windows = {}; // id -> { node, title, app, taskbarBtn, maximized, prevBounds }
   let desktopIcons = [];
-  let windowCount = 0; // for cascading window positions
-
-  // ---- Helpers ----
-
-  /** Get current monitor-screen dimensions */
-  function getScreenSize() {
-    const screen = document.getElementById("monitor-screen");
-    return { w: screen.clientWidth, h: screen.clientHeight };
-  }
-
-  /** Compute initial bounds for a window based on screen size */
-  function computeWindowBounds(desiredW, desiredH) {
-    const screen = getScreenSize();
-    // Scale down if desired size exceeds screen
-    const scaleX = screen.w < desiredW ? (screen.w - 20) / desiredW : 1;
-    const scaleY = screen.h < desiredH ? (screen.h - 60) / desiredH : 1;
-    const scale = Math.min(scaleX, scaleY, 1);
-    const w = Math.round(desiredW * scale);
-    const h = Math.round(desiredH * scale);
-    // Cascade each new window by ~30px
-    const offset = (windowCount * 30) % Math.min(screen.w - w, 200);
-    const left = Math.round(offset);
-    const top = Math.round(screen.h * 0.05 + offset);
-    windowCount++;
-    return { w, h, left, top };
-  }
 
   // ---- DOM refs ----
   const desktop = document.getElementById("desktop");
@@ -50,22 +24,14 @@
     // Desktop icon events
     desktopIcons = document.querySelectorAll(".desktop-icon");
     desktopIcons.forEach((icon) => {
-      // Double-click (desktop)
       icon.addEventListener("dblclick", () => {
         const app = icon.dataset.app;
         if (app) openWindow(app);
       });
-      // Single tap on mobile opens the app
-      let tapTimer = null;
       icon.addEventListener("click", (e) => {
         e.stopPropagation();
         desktopIcons.forEach((i) => i.classList.remove("selected"));
         icon.classList.add("selected");
-        // On touch devices, single tap opens (no double-click)
-        if (window.matchMedia("(max-width: 600px)").matches) {
-          const app = icon.dataset.app;
-          if (app) openWindow(app);
-        }
       });
     });
 
@@ -183,16 +149,7 @@
     const screen = document.getElementById("monitor-screen");
     screen.appendChild(clone);
 
-    // Apply dynamic window sizing from data attributes
-    const desiredW = parseInt(clone.dataset.winW) || 480;
-    const desiredH = parseInt(clone.dataset.winH) || 360;
-    const bounds = computeWindowBounds(desiredW, desiredH);
-    clone.style.width = bounds.w + "px";
-    clone.style.height = bounds.h + "px";
-    clone.style.left = bounds.left + "px";
-    clone.style.top = bounds.top + "px";
-
-    const titleEl
+    const titleEl = clone.querySelector(".titlebar-text");
     const title = titleEl ? titleEl.textContent.trim() : app;
 
     // Setup buttons
@@ -330,9 +287,8 @@
       };
       winNode.style.top = "0px";
       winNode.style.left = "0px";
-      const screen = getScreenSize();
-      winNode.style.width = screen.w + "px";
-      winNode.style.height = (screen.h - 38) + "px";
+      winNode.style.width = `calc(100vw - 4px)`;
+      winNode.style.height = `calc(100vh - 42px)`;
       winNode.style.borderWidth = "0";
       win.maximized = true;
     }
@@ -378,46 +334,37 @@
 
     let startX, startY, startLeft, startTop, dragging = false;
 
-    function onDragStart(e) {
-      if (e.target.closest(".titlebar-btns")) return;
+    titlebar.addEventListener("mousedown", (e) => {
+      if (e.target.closest(".titlebar-btns")) return; // don't drag from buttons
       const win = findWindowByNode(winNode);
       if (win && win.maximized) return;
 
       e.preventDefault();
       dragging = true;
-      const pt = e.touches ? e.touches[0] : e;
-      startX = pt.clientX;
-      startY = pt.clientY;
+      startX = e.clientX;
+      startY = e.clientY;
       startLeft = winNode.offsetLeft;
       startTop = winNode.offsetTop;
       winNode.classList.add("dragging");
-    }
 
-    function onDragMove(e) {
-      if (!dragging) return;
-      const pt = e.touches ? e.touches[0] : e;
-      const dx = pt.clientX - startX;
-      const dy = pt.clientY - startY;
-      winNode.style.left = Math.max(-100, startLeft + dx) + "px";
-      winNode.style.top = Math.max(0, startTop + dy) + "px";
-    }
+      function onMove(ev) {
+        if (!dragging) return;
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        winNode.style.left = Math.max(-100, startLeft + dx) + "px";
+        winNode.style.top = Math.max(0, startTop + dy) + "px";
+      }
 
-    function onDragEnd() {
-      dragging = false;
-      winNode.classList.remove("dragging");
-      document.removeEventListener("mousemove", onDragMove);
-      document.removeEventListener("mouseup", onDragEnd);
-      document.removeEventListener("touchmove", onDragMove);
-      document.removeEventListener("touchend", onDragEnd);
-    }
+      function onUp() {
+        dragging = false;
+        winNode.classList.remove("dragging");
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+      }
 
-    titlebar.addEventListener("mousedown", onDragStart);
-    titlebar.addEventListener("touchstart", onDragStart, { passive: false });
-
-    document.addEventListener("mousemove", onDragMove);
-    document.addEventListener("mouseup", onDragEnd);
-    document.addEventListener("touchmove", onDragMove, { passive: false });
-    document.addEventListener("touchend", onDragEnd);
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    });
   }
 
   function setupResize(winNode) {
@@ -812,7 +759,6 @@
     windows = {};
     focusedWindow = null;
     zIndexCounter = 100;
-    windowCount = 0;
     // Reset DOS
     dosCwd = "C:\\WINDOWS";
     dosHistory = [];
