@@ -658,14 +658,17 @@
         appendDosLine(output, "  [1] 轨道交通仿真系统 MetroSim");
         appendDosLine(output, "      React 19 + TypeScript + MapLibre GL");
         appendDosLine(output, "      300+ 轨道段 | 60fps | 三重视图 | 5人团队");
+        appendDosLine(output, "      https://github.com/Misaka16483/BJTUMetroSim");
         appendDosLine(output, "");
         appendDosLine(output, "  [2] 方言宝 DialectMaster");
         appendDosLine(output, "      Next.js 14 + FastAPI + SenseVoice AI");
         appendDosLine(output, "      AI方言识别 | 8页面全栈 | ECharts可视化");
+        appendDosLine(output, "      https://github.com/my6014/Dialect_Master");
         appendDosLine(output, "");
         appendDosLine(output, "  [3] Smart Resume - AI智能求职助手");
         appendDosLine(output, "      Flask + React 18 + Zustand + Tailwind CSS");
         appendDosLine(output, "      12页面SPA | AI简历优化 | 爬虫自动抓取");
+        appendDosLine(output, "      https://github.com/YijunSu/smart_resume");
         appendDosLine(output, "----------------------------------------------------------");
         break;
       case "contact":
@@ -729,19 +732,125 @@
   }
 
   function initBrowser(winNode) {
-    // "转到" button just shows a tooltip
-    const goBtn = Array.from(winNode.querySelectorAll(".win-btn")).find(
-      (b) => b.textContent.trim() === "转到"
-    );
-    if (goBtn) {
-      goBtn.addEventListener("click", () => {
-        const addr = winNode.querySelector('input[type="text"]');
-        if (addr) {
-          addr.select();
-          addr.focus();
+    const allInputs = Array.from(winNode.querySelectorAll('input[type="text"]'));
+    const addrInput = allInputs.find(function(inp) { return !inp.closest('.window-body'); });
+    const bodyEl = winNode.querySelector('.window-body');
+    const originalBodyHTML = bodyEl.innerHTML;
+
+    // Bind Google search UI (search box + buttons in the body)
+    function bindSearchUI() {
+      const si = bodyEl.querySelector('input[type="text"]');
+      const sbs = bodyEl.querySelectorAll('.win-btn');
+      if (si) {
+        si.addEventListener("keydown", function handler(e) {
+          if (e.key === "Enter") doSearch(si.value);
+        });
+      }
+      sbs.forEach(function(b) {
+        if (b.textContent.trim() === "Google 搜索" || b.textContent.trim() === "手气不错") {
+          b.addEventListener("click", function() {
+            const inp = bodyEl.querySelector('input[type="text"]');
+            if (inp) doSearch(inp.value);
+          });
         }
       });
     }
+
+    bindSearchUI();
+
+    function doSearch(query) {
+      var q = (query || "").trim();
+      if (!q) {
+        // back to homepage
+        bodyEl.innerHTML = originalBodyHTML;
+        bodyEl.style.cssText = "padding:0;overflow-y:auto;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px";
+        bindSearchUI();
+        return;
+      }
+      if (q.includes("马勇") || q.includes("my6014")) {
+        bodyEl.innerHTML = aboutMeSearchResult();
+      } else if (q.startsWith("http://") || q.startsWith("https://")) {
+        bodyEl.innerHTML = '<div style="padding:40px;text-align:center"><p style="font-size:14px;color:#666">正在导航到 <strong>' + q + '</strong>...</p><p style="font-size:12px;color:#999">（这是模拟浏览器，无法真正跳转哦）</p></div>';
+      } else {
+        bodyEl.innerHTML = '<div style="padding:40px;text-align:center"><p style="font-size:14px;color:#666">关于 <strong>' + q + '</strong> 的搜索结果：</p><p style="font-size:12px;color:#999">（模拟浏览器，仅支持搜索"马勇"）</p></div>';
+      }
+      bodyEl.style.cssText = "padding:16px;overflow-y:auto;background:#fff;display:block;min-height:360px";
+    }
+
+    // Address bar "转到" button
+    var goBtn = Array.from(winNode.querySelectorAll(".win-btn")).find(function(b) {
+      return b.textContent.trim() === "转到" && !b.closest(".window-body");
+    });
+    if (goBtn) {
+      goBtn.addEventListener("click", function() {
+        if (addrInput) doSearch(addrInput.value);
+      });
+    }
+
+    // Enter on address bar
+    if (addrInput) {
+      addrInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") doSearch(addrInput.value);
+      });
+    }
+
+    // Click Google logo to go back to homepage
+    var logoEl = bodyEl.querySelector('div[style*="text-align:center"]');
+    if (logoEl) {
+      var logoText = logoEl.querySelector('div[style*="font-size:48px"]');
+      if (logoText) {
+        logoText.style.cursor = "pointer";
+        logoText.title = "返回首页";
+        logoText.addEventListener("click", function() { doSearch(""); });
+      }
+    }
+  }
+
+  function aboutMeSearchResult() {
+    return `
+<div style="width:100%;max-width:600px;margin:0 auto">
+  <div style="font-size:11px;color:#666;margin-bottom:12px">找到约 1 条结果，用时 0.01 秒</div>
+
+  <!-- Main result -->
+  <div style="margin-bottom:20px">
+    <div style="font-size:13px;color:#1a0dab;cursor:pointer;text-decoration:underline;font-weight:bold">https://my6014.github.io/my_site/</div>
+    <div style="font-size:18px;color:#1a0dab;cursor:pointer;font-weight:bold;margin:4px 0">马勇 — 前端开发 / 测试开发 | 北京交通大学</div>
+    <div style="font-size:13px;color:#555;line-height:1.5">
+      马勇，北京交通大学软件工程专业在读本科生，热爱前端开发与软件测试。有丰富的 React / Next.js / TypeScript 项目经验，参与过<b>轨道交通仿真系统 MetroSim</b>、<b>AI方言识别平台 DialectMaster</b>、<b>Smart Resume 智能求职助手</b>等多个项目。
+    </div>
+  </div>
+
+  <!-- Quick info cards -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+    <div style="flex:1;min-width:140px;padding:8px 12px;background:#f8f8ff;border:1px solid #c0c0ff;font-size:12px">
+      <div style="font-weight:bold;color:#000080">&#x1F393; 教育背景</div>
+      <div style="margin-top:4px">北京交通大学</div>
+      <div style="color:#666">软件工程 · 2023-2027</div>
+    </div>
+    <div style="flex:1;min-width:140px;padding:8px 12px;background:#f8fff8;border:1px solid #c0ffc0;font-size:12px">
+      <div style="font-weight:bold;color:#000080">&#x1F4CD; 所在地</div>
+      <div style="margin-top:4px">北京市海淀区</div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div style="font-size:12px;color:#555;margin-bottom:8px">
+    <div style="font-size:13px;font-weight:bold;color:#1a0dab;cursor:pointer;margin-bottom:4px">联系方式</div>
+    &#x1F4E7; 1806369472@qq.com &nbsp;&nbsp; &#x1F4F1; 133-8955-4545 &nbsp;&nbsp; &#x1F40D; github.com/my6014
+  </div>
+
+  <!-- Skills -->
+  <div style="font-size:12px;color:#555;margin-bottom:8px">
+    <div style="font-size:13px;font-weight:bold;color:#1a0dab;cursor:pointer;margin-bottom:4px">专业技能</div>
+    <span style="background:#e8e8ff;padding:2px 6px">React</span>
+    <span style="background:#e8ffe8;padding:2px 6px">Next.js</span>
+    <span style="background:#ffe8e8;padding:2px 6px">TypeScript</span>
+    <span style="background:#fff8e8;padding:2px 6px">Vue</span>
+    <span style="background:#f0e8ff;padding:2px 6px">Python</span>
+    <span style="background:#ffe8ff;padding:2px 6px">FastAPI</span>
+    <span style="background:#e8ffe8;padding:2px 6px">Jest / Cypress</span>
+  </div>
+</div>`;
   }
 
   // ============================================
