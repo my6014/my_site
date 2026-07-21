@@ -37,16 +37,19 @@ open index.html
 ## 📁 项目结构
 
 ```
-my_site/
-└── simulated-os/
-    ├── index.html          # 主页面
-    ├── app.js              # 窗口系统 + 交互逻辑
-    ├── style.css           # Win98 经典样式
-    ├── package.json
-    └── fonts/
-        ├── perfect-dos.woff
-        └── perfect-dos.woff2
+├── index.html          # 主页面
+├── app.js              # 窗口系统 + 交互逻辑
+├── style.css           # Win98 经典样式
+├── package.json
+├── README.md
+└── fonts/
+    ├── perfect-dos.woff
+    └── perfect-dos.woff2
 ```
+
+## 🌐 在线访问
+
+部署在 GitHub Pages：**[my6014.github.io/my_site](https://my6014.github.io/my_site)**
 
 ## 🛠️ 技术栈
 
