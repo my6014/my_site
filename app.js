@@ -192,7 +192,7 @@
     clone.style.left = bounds.left + "px";
     clone.style.top = bounds.top + "px";
 
-    const titleEl = clone.querySelector(".titlebar-text");
+    const titleEl
     const title = titleEl ? titleEl.textContent.trim() : app;
 
     // Setup buttons
