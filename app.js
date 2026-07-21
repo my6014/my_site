@@ -149,6 +149,16 @@
     const screen = document.getElementById("monitor-screen");
     screen.appendChild(clone);
 
+    // Center the About Me window on screen
+    if (app === "aboutme") {
+      const sw = screen.clientWidth;
+      const sh = screen.clientHeight - 38; // taskbar
+      const ww = clone.offsetWidth || 420;
+      const wh = clone.offsetHeight || 380;
+      clone.style.left = Math.max(0, (sw - ww) / 2) + "px";
+      clone.style.top = Math.max(0, (sh - wh) / 2) + "px";
+    }
+
     const titleEl = clone.querySelector(".titlebar-text");
     const title = titleEl ? titleEl.textContent.trim() : app;
 
